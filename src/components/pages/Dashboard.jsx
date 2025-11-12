@@ -152,11 +152,33 @@ const getTaskStats = () => {
       };
     }
 
-    const totalTasks = tasks.length;
-    const completedTasks = tasks.filter(t => t.status === "Completed").length;
-    const inProgressTasks = tasks.filter(t => t.status === "In Progress").length;
-    const todoTasks = tasks.filter(t => t.status === "To Do").length;
-    const overdueTasks = tasks.filter(t => 
+    // Filter out any sample/mock data - only count user-created tasks
+    // Assuming user-created tasks have meaningful data vs. placeholder content
+    const userTasks = tasks.filter(task => 
+      task && 
+      task.name && 
+      task.name.trim() !== '' &&
+      !task.name.toLowerCase().includes('sample') &&
+      !task.name.toLowerCase().includes('example') &&
+      !task.name.toLowerCase().includes('demo')
+    );
+
+    // If no real user tasks exist, return zero counts
+    if (userTasks.length === 0) {
+      return { 
+        totalTasks: 0, 
+        completedTasks: 0, 
+        inProgressTasks: 0, 
+        todoTasks: 0, 
+        overdueTasks: 0 
+      };
+    }
+
+    const totalTasks = userTasks.length;
+    const completedTasks = userTasks.filter(t => t.status === "Completed").length;
+    const inProgressTasks = userTasks.filter(t => t.status === "In Progress").length;
+    const todoTasks = userTasks.filter(t => t.status === "To Do").length;
+    const overdueTasks = userTasks.filter(t => 
       isAfter(new Date(), new Date(t.dueDate)) && t.status !== "Completed"
     ).length;
 
