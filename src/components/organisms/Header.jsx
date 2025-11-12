@@ -1,20 +1,60 @@
-import React, { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { notificationService } from "@/services/api/notificationService";
+import ApperIcon from "@/components/ApperIcon";
 import SearchBar from "@/components/molecules/SearchBar";
 import NotificationBell from "@/components/molecules/NotificationBell";
 import Button from "@/components/atoms/Button";
-import ApperIcon from "@/components/ApperIcon";
 import { cn } from "@/utils/cn";
-import { useNotifications } from "@/hooks/useNotifications";
 
 const Header = ({ onSearch, onAddClick }) => {
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
-  const { 
-    notifications, 
-    markAsRead, 
-    markAllAsRead 
-  } = useNotifications();
+  
+  // Local notification state management
+  const [notifications, setNotifications] = useState([]);
+  const [notificationLoading, setNotificationLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        setNotificationLoading(true);
+        const data = await notificationService.getAll();
+        setNotifications(data);
+      } catch (error) {
+        console.error('Failed to fetch notifications:', error);
+        setNotifications([]);
+      } finally {
+        setNotificationLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  const markAsRead = async (id) => {
+    try {
+      await notificationService.markAsRead(id);
+      setNotifications(prev => 
+        prev.map(notif => 
+          notif.id === id ? { ...notif, read: true } : notif
+        )
+      );
+    } catch (error) {
+      console.error('Failed to mark notification as read:', error);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      await notificationService.markAllAsRead();
+      setNotifications(prev => 
+        prev.map(notif => ({ ...notif, read: true }))
+      );
+    } catch (error) {
+      console.error('Failed to mark all notifications as read:', error);
+    }
+  };
 
   const navItems = [
     { path: "/", label: "Dashboard", icon: "LayoutDashboard" },
