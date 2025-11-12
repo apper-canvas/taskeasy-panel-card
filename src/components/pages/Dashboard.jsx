@@ -82,16 +82,28 @@ const Dashboard = () => {
   };
 
   // Dashboard calculations
-  const getProjectStats = () => {
+const getProjectStats = () => {
     const totalProjects = projects.length;
-    const activeProjects = projects.filter(p => {
-      const projectTasks = tasks.filter(t => t.projectId === p.id);
-      const completedTasks = projectTasks.filter(t => t.status === "Completed");
-      return projectTasks.length === 0 || completedTasks.length < projectTasks.length;
+    
+    // Calculate task statistics
+    const completedTasks = tasks.filter(task => task.status === "Completed").length;
+    const inProgressTasks = tasks.filter(task => task.status === "In Progress").length;
+    
+    // Calculate overdue tasks (past due date and not completed)
+    const currentDate = new Date();
+    const overdueTasks = tasks.filter(task => {
+      if (task.status === "Completed") return false;
+      if (!task.dueDate) return false;
+      const dueDate = new Date(task.dueDate);
+      return dueDate < currentDate;
     }).length;
-    const completedProjects = totalProjects - activeProjects;
-
-    return { totalProjects, activeProjects, completedProjects };
+    
+    return { 
+      totalProjects, 
+      completedTasks, 
+      inProgressTasks, 
+      overdueTasks 
+    };
   };
 
 const getTaskStats = () => {
