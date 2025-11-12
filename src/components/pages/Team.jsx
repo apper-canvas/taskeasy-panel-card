@@ -9,6 +9,7 @@ import ErrorView from "@/components/ui/ErrorView";
 import Empty from "@/components/ui/Empty";
 import MemberCard from "@/components/molecules/MemberCard";
 import FilterDropdown from "@/components/molecules/FilterDropdown";
+import Tasks from "@/components/pages/Tasks";
 import ConfirmModal from "@/components/organisms/ConfirmModal";
 import CreateMemberModal from "@/components/organisms/CreateMemberModal";
 import Button from "@/components/atoms/Button";
@@ -136,14 +137,21 @@ const Team = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gradient">Team</h1>
           <p className="text-secondary-600 mt-1">
             Manage your team members and their assignments
           </p>
-        </div>
 </div>
+        <Button
+          onClick={() => setShowCreateMember(true)}
+          className="btn-primary flex items-center gap-2"
+        >
+          <ApperIcon name="UserPlus" size={16} />
+          Add Member
+        </Button>
+      </div>
 
 {/* Team Stats */}
       {teamMembers.length > 0 && (
