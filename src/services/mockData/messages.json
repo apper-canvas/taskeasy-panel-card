@@ -1,0 +1,152 @@
+[
+  {
+    "Id": 1,
+    "senderId": 1,
+    "senderName": "Sarah Johnson",
+    "senderRole": "Team Leader",
+    "content": "Hey team! Just wanted to check in on the Mobile App project progress. How are we doing with the authentication module?",
+    "timestamp": "2024-01-19T14:30:00.000Z",
+    "projectId": 1,
+    "projectName": "Mobile App Development"
+  },
+  {
+    "Id": 2,
+    "senderId": 3,
+    "senderName": "Mike Chen",
+    "senderRole": "Developer",
+    "content": "Hi Sarah! The authentication is about 80% complete. I'm working on the password reset functionality and should have it done by end of week.",
+    "timestamp": "2024-01-19T14:35:00.000Z",
+    "projectId": 1,
+    "projectName": "Mobile App Development"
+  },
+  {
+    "Id": 3,
+    "senderId": 2,
+    "senderName": "Emily Davis",
+    "senderRole": "Designer",
+    "content": "The UI mockups for the auth screens are ready for review. I've uploaded them to the shared drive.",
+    "timestamp": "2024-01-19T15:10:00.000Z",
+    "projectId": 1,
+    "projectName": "Mobile App Development"
+  },
+  {
+    "Id": 4,
+    "senderId": 4,
+    "senderName": "James Wilson",
+    "senderRole": "Team Leader",
+    "content": "Great work everyone on the E-commerce Platform! The client is very happy with the progress. Let's push for the beta release next week.",
+    "timestamp": "2024-01-19T16:20:00.000Z",
+    "projectId": 2,
+    "projectName": "E-commerce Platform"
+  },
+  {
+    "Id": 5,
+    "senderId": 5,
+    "senderName": "Lisa Brown",
+    "senderRole": "Developer",
+    "content": "I've finished implementing the shopping cart functionality. Currently working on the payment integration with Stripe.",
+    "timestamp": "2024-01-19T16:45:00.000Z",
+    "projectId": 2,
+    "projectName": "E-commerce Platform"
+  },
+  {
+    "Id": 6,
+    "senderId": 1,
+    "senderName": "Sarah Johnson",
+    "senderRole": "Team Leader",
+    "content": "Quick reminder: We have the sprint planning meeting tomorrow at 10 AM. Please come prepared with your task estimates.",
+    "timestamp": "2024-01-19T17:00:00.000Z",
+    "projectId": null,
+    "projectName": null
+  },
+  {
+    "Id": 7,
+    "senderId": 6,
+    "senderName": "David Rodriguez",
+    "senderRole": "QA Tester",
+    "content": "I found a few minor bugs in the CRM system during testing. I'll create tickets for them in the issue tracker.",
+    "timestamp": "2024-01-19T17:30:00.000Z",
+    "projectId": 3,
+    "projectName": "CRM System"
+  },
+  {
+    "Id": 8,
+    "senderId": 3,
+    "senderName": "Mike Chen",
+    "senderRole": "Developer",
+    "content": "Thanks David! I'll prioritize fixing those bugs. Can you share the details in our project channel?",
+    "timestamp": "2024-01-19T17:45:00.000Z",
+    "projectId": 3,
+    "projectName": "CRM System"
+  },
+  {
+    "Id": 9,
+    "senderId": 2,
+    "senderName": "Emily Davis",
+    "senderRole": "Designer",
+    "content": "The new landing page design is complete! I think it looks much more modern and user-friendly. Feedback welcome!",
+    "timestamp": "2024-01-20T09:15:00.000Z",
+    "projectId": 4,
+    "projectName": "Website Redesign"
+  },
+  {
+    "Id": 10,
+    "senderId": 4,
+    "senderName": "James Wilson",
+    "senderRole": "Team Leader",
+    "content": "Emily, the landing page looks fantastic! The color scheme and layout are exactly what we needed.",
+    "timestamp": "2024-01-20T09:30:00.000Z",
+    "projectId": 4,
+    "projectName": "Website Redesign"
+  },
+  {
+    "Id": 11,
+    "senderId": 5,
+    "senderName": "Lisa Brown",
+    "senderRole": "Developer",
+    "content": "I can start implementing the frontend for the new landing page this afternoon. Should be straightforward with the designs Emily provided.",
+    "timestamp": "2024-01-20T10:00:00.000Z",
+    "projectId": 4,
+    "projectName": "Website Redesign"
+  },
+  {
+    "Id": 12,
+    "senderId": 7,
+    "senderName": "Alex Thompson",
+    "senderRole": "Project Manager",
+    "content": "Team standup in 30 minutes! We'll review yesterday's progress and plan today's tasks. See you all in the meeting room.",
+    "timestamp": "2024-01-20T10:30:00.000Z",
+    "projectId": null,
+    "projectName": null
+  },
+  {
+    "Id": 13,
+    "senderId": 6,
+    "senderName": "David Rodriguez",
+    "senderRole": "QA Tester",
+    "content": "The mobile app is ready for final testing! I'll run through all the test cases today and tomorrow. Launch is looking good for Friday!",
+    "timestamp": "2024-01-20T11:15:00.000Z",
+    "projectId": 1,
+    "projectName": "Mobile App Development"
+  },
+  {
+    "Id": 14,
+    "senderId": 1,
+    "senderName": "Sarah Johnson",
+    "senderRole": "Team Leader",
+    "content": "Excellent news David! Make sure to test the edge cases we discussed. This is going to be a great launch! 🚀",
+    "timestamp": "2024-01-20T11:30:00.000Z",
+    "projectId": 1,
+    "projectName": "Mobile App Development"
+  },
+  {
+    "Id": 15,
+    "senderId": 7,
+    "senderName": "Alex Thompson",
+    "senderRole": "Project Manager",
+    "content": "Great job everyone! Our team productivity has increased by 25% this quarter. Keep up the excellent work! 👏",
+    "timestamp": "2024-01-20T14:00:00.000Z",
+    "projectId": null,
+    "projectName": null
+  }
+]

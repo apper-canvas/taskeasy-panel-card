@@ -57,9 +57,10 @@ const Header = ({ onSearch, onAddClick }) => {
   };
 
   const navItems = [
-    { path: "/", label: "Dashboard", icon: "LayoutDashboard" },
+{ path: "/", label: "Dashboard", icon: "LayoutDashboard" },
     { path: "/projects", label: "Projects", icon: "FolderOpen" },
-    { path: "/team", label: "Team", icon: "Users" }
+    { path: "/team", label: "Team", icon: "Users" },
+    { path: "/chats", label: "Chats", icon: "MessageCircle" }
   ];
 
   const handleSearch = (term) => {
@@ -120,7 +121,7 @@ const Header = ({ onSearch, onAddClick }) => {
                     <ApperIcon name={item.icon} className="w-4 h-4" />
                     {item.label}
                   </Link>
-                );
+);
               })}
             </nav>
           </div>
@@ -178,7 +179,7 @@ const Header = ({ onSearch, onAddClick }) => {
       {/* Mobile Navigation */}
       <div className="md:hidden border-t border-secondary-200 bg-secondary-50">
         <nav className="flex items-center justify-around py-2">
-          {navItems.map((item) => {
+{navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <Link

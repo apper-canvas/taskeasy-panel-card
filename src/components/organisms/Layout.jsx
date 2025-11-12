@@ -13,13 +13,16 @@ const Layout = () => {
   const [showCreateMember, setShowCreateMember] = useState(false);
   const [showCreateTask, setShowCreateTask] = useState(false);
 
-  const handleAddClick = () => {
+const handleAddClick = () => {
     switch (location.pathname) {
       case "/projects":
         setShowCreateProject(true);
         break;
       case "/team":
         setShowCreateMember(true);
+        break;
+      case "/chats":
+        // No modal needed for chats - handled within chat component
         break;
       default:
         setShowCreateTask(true);

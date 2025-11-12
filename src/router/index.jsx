@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import React, { Suspense, lazy } from "react";
 import Layout from "@/components/organisms/Layout";
 
 // Lazy load page components
@@ -7,8 +7,8 @@ const Dashboard = lazy(() => import("@/components/pages/Dashboard"));
 const Projects = lazy(() => import("@/components/pages/Projects"));
 const Team = lazy(() => import("@/components/pages/Team"));
 const Tasks = lazy(() => import("@/components/pages/Tasks"));
+const Chats = lazy(() => import("@/components/pages/Chats"));
 const NotFound = lazy(() => import("@/components/pages/NotFound"));
-
 const LoadingFallback = () => (
   <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
     <div className="text-center space-y-4">
@@ -51,6 +51,14 @@ const mainRoutes = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <Tasks />
+      </Suspense>
+    )
+  },
+  {
+    path: "chats",
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <Chats />
       </Suspense>
     )
   },
