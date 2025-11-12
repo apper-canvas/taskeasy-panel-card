@@ -94,7 +94,18 @@ const Dashboard = () => {
     return { totalProjects, activeProjects, completedProjects };
   };
 
-  const getTaskStats = () => {
+const getTaskStats = () => {
+    // Return zero stats when no tasks exist
+    if (!tasks || tasks.length === 0) {
+      return { 
+        totalTasks: 0, 
+        completedTasks: 0, 
+        inProgressTasks: 0, 
+        todoTasks: 0, 
+        overdueTasks: 0 
+      };
+    }
+
     const totalTasks = tasks.length;
     const completedTasks = tasks.filter(t => t.status === "Completed").length;
     const inProgressTasks = tasks.filter(t => t.status === "In Progress").length;
