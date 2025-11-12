@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useOutletContext } from 'react-router-dom';
+import { useSearchParams, useOutletContext, useNavigate } from 'react-router-dom';
 import { taskService } from '@/services/api/taskService';
 import { projectService } from '@/services/api/projectService';
 import { teamService } from '@/services/api/teamService';
@@ -16,6 +16,7 @@ import { format } from 'date-fns';
 function Tasks() {
   const [searchParams] = useSearchParams();
   const { searchTerm } = useOutletContext() || {};
+  const navigate = useNavigate();
   
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -155,9 +156,9 @@ function Tasks() {
   if (error) return <ErrorView error={error} onRetry={loadData} />;
 
   return (
-    <div className="space-y-6">
+<div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-secondary-800">{getFilterTitle()}</h1>
           <p className="text-secondary-600">
@@ -165,26 +166,38 @@ function Tasks() {
           </p>
         </div>
         
-        <div className="flex flex-wrap gap-3">
-          <FilterDropdown
-            options={statusOptions}
-            value={statusFilter}
-            onChange={setStatusFilter}
-            placeholder="Filter by Status"
-          />
-          <FilterDropdown
-            options={priorityOptions}
-            value={priorityFilter}
-            onChange={setPriorityFilter}
-            placeholder="Filter by Priority"
-          />
-          <FilterDropdown
-            options={projectOptions}
-            value={projectFilter}
-            onChange={setProjectFilter}
-            placeholder="Filter by Project"
-          />
+        <div className="flex items-center gap-4">
+          <Button
+            onClick={() => navigate('/dashboard')}
+            variant="ghost"
+            size="sm"
+            className="flex items-center gap-2 text-secondary-600 hover:text-secondary-800"
+          >
+            <ApperIcon name="ArrowLeft" size={16} />
+            Back to Dashboard
+          </Button>
         </div>
+      </div>
+
+      <div className="flex flex-wrap gap-3 sm:justify-end">
+<FilterDropdown
+          options={statusOptions}
+          value={statusFilter}
+          onChange={setStatusFilter}
+          placeholder="Filter by Status"
+        />
+        <FilterDropdown
+          options={priorityOptions}
+          value={priorityFilter}
+          onChange={setPriorityFilter}
+          placeholder="Filter by Priority"
+        />
+        <FilterDropdown
+          options={projectOptions}
+          value={projectFilter}
+          onChange={setProjectFilter}
+          placeholder="Filter by Project"
+        />
       </div>
 
       {/* Tasks Grid */}
