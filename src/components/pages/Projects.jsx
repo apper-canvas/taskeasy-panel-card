@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import Button from "@/components/atoms/Button";
-import FilterDropdown from "@/components/molecules/FilterDropdown";
-import ProjectCard from "@/components/molecules/ProjectCard";
-import ApperIcon from "@/components/ApperIcon";
-import Loading from "@/components/ui/Loading";
-import ErrorView from "@/components/ui/ErrorView";
-import Empty from "@/components/ui/Empty";
-import CreateProjectModal from "@/components/organisms/CreateProjectModal";
-import ProjectDetailModal from "@/components/organisms/ProjectDetailModal";
-import ConfirmModal from "@/components/organisms/ConfirmModal";
 import { projectService } from "@/services/api/projectService";
 import { taskService } from "@/services/api/taskService";
 import { teamService } from "@/services/api/teamService";
 import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Loading from "@/components/ui/Loading";
+import ErrorView from "@/components/ui/ErrorView";
+import Empty from "@/components/ui/Empty";
+import ProjectCard from "@/components/molecules/ProjectCard";
+import FilterDropdown from "@/components/molecules/FilterDropdown";
+import ConfirmModal from "@/components/organisms/ConfirmModal";
+import CreateProjectModal from "@/components/organisms/CreateProjectModal";
+import ProjectDetailModal from "@/components/organisms/ProjectDetailModal";
+import Button from "@/components/atoms/Button";
 
 const Projects = () => {
   const { searchTerm } = useOutletContext() || {};
@@ -172,44 +172,46 @@ const Projects = () => {
         </Button>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-4 p-4 bg-white rounded-lg border border-secondary-200">
-        <div className="flex items-center gap-2">
-          <ApperIcon name="Filter" className="w-5 h-5 text-secondary-500" />
-          <span className="text-sm font-medium text-secondary-700">Filters:</span>
+{/* Filters */}
+      {projects.length > 0 && (
+        <div className="flex flex-wrap items-center gap-4 p-4 bg-white rounded-lg border border-secondary-200">
+          <div className="flex items-center gap-2">
+            <ApperIcon name="Filter" className="w-5 h-5 text-secondary-500" />
+            <span className="text-sm font-medium text-secondary-700">Filters:</span>
+          </div>
+          
+          <FilterDropdown
+            label="Status"
+            options={statusOptions}
+            selectedValues={statusFilter}
+            onSelectionChange={setStatusFilter}
+          />
+
+          <FilterDropdown
+            label="Team Member"
+            options={memberOptions}
+            selectedValues={memberFilter}
+            onSelectionChange={setMemberFilter}
+          />
+
+          {(statusFilter.length > 0 || memberFilter.length > 0) && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setStatusFilter([]);
+                setMemberFilter([]);
+              }}
+            >
+              Clear Filters
+            </Button>
+          )}
+
+          <div className="ml-auto text-sm text-secondary-600">
+            {filteredProjects.length} of {projects.length} projects
+          </div>
         </div>
-        
-        <FilterDropdown
-          label="Status"
-          options={statusOptions}
-          selectedValues={statusFilter}
-          onSelectionChange={setStatusFilter}
-        />
-
-        <FilterDropdown
-          label="Team Member"
-          options={memberOptions}
-          selectedValues={memberFilter}
-          onSelectionChange={setMemberFilter}
-        />
-
-        {(statusFilter.length > 0 || memberFilter.length > 0) && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setStatusFilter([]);
-              setMemberFilter([]);
-            }}
-          >
-            Clear Filters
-          </Button>
-        )}
-
-        <div className="ml-auto text-sm text-secondary-600">
-          {filteredProjects.length} of {projects.length} projects
-        </div>
-      </div>
+      )}
 
       {/* Projects Grid */}
       {filteredProjects.length === 0 ? (

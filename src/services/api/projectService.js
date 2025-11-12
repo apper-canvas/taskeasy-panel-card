@@ -1,8 +1,8 @@
-import projectsData from "@/services/mockData/projects.json";
+// Mock data removed - starting with empty projects array
 
 class ProjectService {
   constructor() {
-    this.projects = [...projectsData];
+this.projects = [];
   }
 
   async getAll() {

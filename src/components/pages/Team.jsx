@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import Button from "@/components/atoms/Button";
-import FilterDropdown from "@/components/molecules/FilterDropdown";
-import MemberCard from "@/components/molecules/MemberCard";
+import { teamService } from "@/services/api/teamService";
+import { taskService } from "@/services/api/taskService";
+import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
 import Loading from "@/components/ui/Loading";
 import ErrorView from "@/components/ui/ErrorView";
 import Empty from "@/components/ui/Empty";
-import CreateMemberModal from "@/components/organisms/CreateMemberModal";
+import MemberCard from "@/components/molecules/MemberCard";
+import FilterDropdown from "@/components/molecules/FilterDropdown";
 import ConfirmModal from "@/components/organisms/ConfirmModal";
-import { teamService } from "@/services/api/teamService";
-import { taskService } from "@/services/api/taskService";
-import { toast } from "react-toastify";
+import CreateMemberModal from "@/components/organisms/CreateMemberModal";
+import Button from "@/components/atoms/Button";
 
 const Team = () => {
   const { searchTerm } = useOutletContext() || {};
@@ -148,71 +148,74 @@ const Team = () => {
         </Button>
       </div>
 
-      {/* Team Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-r from-primary-50 to-primary-100 p-4 rounded-lg border border-primary-200">
-          <div className="flex items-center gap-3">
-            <ApperIcon name="Users" className="w-8 h-8 text-primary-600" />
-            <div>
-              <p className="text-sm text-primary-600 font-medium">Total Members</p>
-              <p className="text-2xl font-bold text-primary-900">{teamMembers.length}</p>
+{/* Team Stats */}
+      {teamMembers.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-gradient-to-r from-primary-50 to-primary-100 p-4 rounded-lg border border-primary-200">
+            <div className="flex items-center gap-3">
+              <ApperIcon name="Users" className="w-8 h-8 text-primary-600" />
+              <div>
+                <p className="text-sm text-primary-600 font-medium">Total Members</p>
+                <p className="text-2xl font-bold text-primary-900">{teamMembers.length}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-r from-success-50 to-success-100 p-4 rounded-lg border border-success-200">
+            <div className="flex items-center gap-3">
+              <ApperIcon name="CheckSquare" className="w-8 h-8 text-success-600" />
+              <div>
+                <p className="text-sm text-success-600 font-medium">Active Tasks</p>
+                <p className="text-2xl font-bold text-success-900">
+                  {tasks.filter(t => t.status !== "Completed").length}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-r from-warning-50 to-warning-100 p-4 rounded-lg border border-warning-200">
+            <div className="flex items-center gap-3">
+              <ApperIcon name="Clock" className="w-8 h-8 text-warning-600" />
+              <div>
+                <p className="text-sm text-warning-600 font-medium">Avg. Tasks per Member</p>
+                <p className="text-2xl font-bold text-warning-900">
+                  {teamMembers.length > 0 
+                    ? Math.round(tasks.filter(t => t.status !== "Completed").length / teamMembers.length)
+                    : 0
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-r from-secondary-50 to-secondary-100 p-4 rounded-lg border border-secondary-200">
+            <div className="flex items-center gap-3">
+              <ApperIcon name="Award" className="w-8 h-8 text-secondary-600" />
+              <div>
+                <p className="text-sm text-secondary-600 font-medium">Unique Roles</p>
+                <p className="text-2xl font-bold text-secondary-900">
+                  {new Set(teamMembers.map(m => m.role)).size}
+                </p>
+              </div>
             </div>
           </div>
         </div>
+      )}
 
-        <div className="bg-gradient-to-r from-success-50 to-success-100 p-4 rounded-lg border border-success-200">
-          <div className="flex items-center gap-3">
-            <ApperIcon name="CheckSquare" className="w-8 h-8 text-success-600" />
-            <div>
-              <p className="text-sm text-success-600 font-medium">Active Tasks</p>
-              <p className="text-2xl font-bold text-success-900">
-                {tasks.filter(t => t.status !== "Completed").length}
-              </p>
-            </div>
+{/* Filters */}
+      {teamMembers.length > 0 && (
+        <div className="flex flex-wrap items-center gap-4 p-4 bg-white rounded-lg border border-secondary-200">
+          <div className="flex items-center gap-2">
+            <ApperIcon name="Filter" className="w-5 h-5 text-secondary-500" />
+            <span className="text-sm font-medium text-secondary-700">Filters:</span>
           </div>
-        </div>
-
-        <div className="bg-gradient-to-r from-warning-50 to-warning-100 p-4 rounded-lg border border-warning-200">
-          <div className="flex items-center gap-3">
-            <ApperIcon name="Clock" className="w-8 h-8 text-warning-600" />
-            <div>
-              <p className="text-sm text-warning-600 font-medium">Avg. Tasks per Member</p>
-              <p className="text-2xl font-bold text-warning-900">
-                {teamMembers.length > 0 
-                  ? Math.round(tasks.filter(t => t.status !== "Completed").length / teamMembers.length)
-                  : 0
-                }
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-r from-secondary-50 to-secondary-100 p-4 rounded-lg border border-secondary-200">
-          <div className="flex items-center gap-3">
-            <ApperIcon name="Award" className="w-8 h-8 text-secondary-600" />
-            <div>
-              <p className="text-sm text-secondary-600 font-medium">Unique Roles</p>
-              <p className="text-2xl font-bold text-secondary-900">
-                {new Set(teamMembers.map(m => m.role)).size}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-4 p-4 bg-white rounded-lg border border-secondary-200">
-        <div className="flex items-center gap-2">
-          <ApperIcon name="Filter" className="w-5 h-5 text-secondary-500" />
-          <span className="text-sm font-medium text-secondary-700">Filters:</span>
-        </div>
-        
-        <FilterDropdown
-          label="Role"
-          options={roleOptions}
-          selectedValues={roleFilter}
-          onSelectionChange={setRoleFilter}
-        />
+          
+          <FilterDropdown
+            label="Role"
+            options={roleOptions}
+            selectedValues={roleFilter}
+            onSelectionChange={setRoleFilter}
+          />
 
         {roleFilter.length > 0 && (
           <Button
@@ -224,10 +227,11 @@ const Team = () => {
           </Button>
         )}
 
-        <div className="ml-auto text-sm text-secondary-600">
-          {filteredMembers.length} of {teamMembers.length} members
-        </div>
-      </div>
+<div className="ml-auto text-sm text-secondary-600">
+            {filteredMembers.length} of {teamMembers.length} members
+          </div>
+</div>
+      )}
 
       {/* Team Members Grid */}
       {filteredMembers.length === 0 ? (

@@ -1,8 +1,8 @@
-import teamData from "@/services/mockData/team.json";
+// Mock data removed - starting with empty team array
 
 class TeamService {
   constructor() {
-    this.members = [...teamData];
+this.members = [];
   }
 
   async getAll() {
