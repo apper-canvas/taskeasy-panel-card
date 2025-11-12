@@ -144,14 +144,7 @@ const Team = () => {
             Manage your team members and their assignments
           </p>
 </div>
-        <Button
-          onClick={() => setShowCreateMember(true)}
-          className="btn-primary flex items-center gap-2"
-        >
-          <ApperIcon name="UserPlus" size={16} />
-          Add Member
-        </Button>
-      </div>
+</div>
 
 {/* Team Stats */}
       {teamMembers.length > 0 && (
@@ -239,7 +232,7 @@ const Team = () => {
       )}
 
       {/* Team Members Grid */}
-      {filteredMembers.length === 0 ? (
+{filteredMembers.length === 0 ? (
         <Empty
           title={teamMembers.length === 0 ? "No team members yet" : "No members found"}
           description={
@@ -249,6 +242,9 @@ const Team = () => {
               ? "No team members match your search criteria. Try adjusting your search or filters."
               : "No team members match your current filters. Try adjusting your filter criteria."
           }
+          actionLabel={teamMembers.length === 0 ? "Add Member" : undefined}
+          actionIcon={teamMembers.length === 0 ? "UserPlus" : undefined}
+          onAction={teamMembers.length === 0 ? () => setShowCreateMember(true) : undefined}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
