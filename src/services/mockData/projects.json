@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "name": "Website Redesign",
+    "description": "Complete redesign of the company website with modern UI/UX principles and responsive design.",
+    "startDate": "2024-01-15T00:00:00.000Z",
+    "dueDate": "2024-03-30T00:00:00.000Z",
+    "assignedMembers": [1, 2, 3],
+    "status": "Active",
+    "completionPercentage": 75,
+    "createdAt": "2024-01-15T08:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Mobile App Development",
+    "description": "Develop a native mobile application for iOS and Android platforms with real-time features.",
+    "startDate": "2024-02-01T00:00:00.000Z",
+    "dueDate": "2024-06-15T00:00:00.000Z",
+    "assignedMembers": [2, 4, 5],
+    "status": "Active",
+    "completionPercentage": 45,
+    "createdAt": "2024-02-01T09:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "name": "API Integration",
+    "description": "Integrate third-party APIs for payment processing, analytics, and social media features.",
+    "startDate": "2024-01-20T00:00:00.000Z",
+    "dueDate": "2024-04-10T00:00:00.000Z",
+    "assignedMembers": [2, 6],
+    "status": "Active",
+    "completionPercentage": 60,
+    "createdAt": "2024-01-20T10:00:00.000Z"
+  },
+  {
+    "id": 4,
+    "name": "Database Migration",
+    "description": "Migrate existing database to new cloud infrastructure with improved performance and security.",
+    "startDate": "2024-03-01T00:00:00.000Z",
+    "dueDate": "2024-04-30T00:00:00.000Z",
+    "assignedMembers": [6, 7],
+    "status": "Active",
+    "completionPercentage": 25,
+    "createdAt": "2024-03-01T11:00:00.000Z"
+  },
+  {
+    "id": 5,
+    "name": "Marketing Campaign",
+    "description": "Launch comprehensive digital marketing campaign including SEO, social media, and content marketing.",
+    "startDate": "2024-02-15T00:00:00.000Z",
+    "dueDate": "2024-05-15T00:00:00.000Z",
+    "assignedMembers": [8, 9],
+    "status": "Active",
+    "completionPercentage": 80,
+    "createdAt": "2024-02-15T12:00:00.000Z"
+  },
+  {
+    "id": 6,
+    "name": "Quality Assurance Testing",
+    "description": "Comprehensive testing suite for all new features including automated and manual testing.",
+    "startDate": "2024-01-10T00:00:00.000Z",
+    "dueDate": "2024-02-28T00:00:00.000Z",
+    "assignedMembers": [3, 10],
+    "status": "Completed",
+    "completionPercentage": 100,
+    "createdAt": "2024-01-10T13:00:00.000Z"
+  }
+]
