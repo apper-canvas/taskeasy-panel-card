@@ -143,10 +143,7 @@ const Team = () => {
             Manage your team members and their assignments
           </p>
         </div>
-        <Button onClick={() => setShowCreateMember(true)} icon="UserPlus">
-          Add Member
-        </Button>
-      </div>
+</div>
 
 {/* Team Stats */}
       {teamMembers.length > 0 && (
@@ -244,9 +241,6 @@ const Team = () => {
               ? "No team members match your search criteria. Try adjusting your search or filters."
               : "No team members match your current filters. Try adjusting your filter criteria."
           }
-          actionLabel="Add Member"
-          onAction={() => setShowCreateMember(true)}
-          icon="UserPlus"
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
