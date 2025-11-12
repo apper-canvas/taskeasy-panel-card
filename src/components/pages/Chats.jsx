@@ -277,23 +277,23 @@ const Chats = () => {
                       <div key={message.Id} className="p-4 hover:bg-secondary-25 transition-colors group">
                         <div className="flex items-start gap-3">
                           {/* Avatar */}
-                          <div className="flex-shrink-0">
+<div className="flex-shrink-0">
                             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
-                              {message.senderName.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                              {message.senderName?.split(' ').map(n => n[0]).join('').slice(0, 2) || 'U'}
                             </div>
                           </div>
                           
                           {/* Message Content */}
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
+<div className="flex items-center gap-2 mb-1">
                               <span className="font-medium text-secondary-800 text-sm">
-                                {message.senderName}
+                                {message.senderName || 'Unknown User'}
                               </span>
                               <span className={cn(
                                 "px-2 py-1 rounded-full text-xs font-medium",
-                                getRoleColor(message.senderRole)
+                                getRoleColor(message.senderRole || 'Team Member')
                               )}>
-                                {message.senderRole}
+                                {message.senderRole || 'Team Member'}
                               </span>
                               {message.projectName && (
                                 <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">
@@ -305,11 +305,10 @@ const Chats = () => {
                               </span>
                             </div>
                             
-                            <p className="text-secondary-700 text-sm leading-relaxed">
-                              {message.content}
+<p className="text-secondary-700 text-sm leading-relaxed">
+                              {message.content || 'No message content'}
                             </p>
                           </div>
-                          
                           {/* Delete Button */}
                           <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                             <Button
