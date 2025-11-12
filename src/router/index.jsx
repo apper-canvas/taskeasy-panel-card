@@ -6,6 +6,7 @@ import Layout from "@/components/organisms/Layout";
 const Dashboard = lazy(() => import("@/components/pages/Dashboard"));
 const Projects = lazy(() => import("@/components/pages/Projects"));
 const Team = lazy(() => import("@/components/pages/Team"));
+const Tasks = lazy(() => import("@/components/pages/Tasks"));
 const NotFound = lazy(() => import("@/components/pages/NotFound"));
 
 const LoadingFallback = () => (
@@ -37,11 +38,19 @@ const mainRoutes = [
       </Suspense>
     )
   },
-  {
+{
     path: "team",
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <Team />
+      </Suspense>
+    )
+  },
+  {
+    path: "tasks",
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <Tasks />
       </Suspense>
     )
   },

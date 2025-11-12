@@ -307,7 +307,10 @@ const getTaskStats = () => {
           </div>
         </Card>
 
-        <Card className="p-6 bg-gradient-to-br from-success-50 to-success-100 border-success-200">
+<Card 
+          className="p-6 bg-gradient-to-br from-success-50 to-success-100 border-success-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
+          onClick={() => navigate('/tasks?status=completed')}
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-success-600 font-medium">Completed Tasks</p>
@@ -319,7 +322,10 @@ const getTaskStats = () => {
           </div>
         </Card>
 
-        <Card className="p-6 bg-gradient-to-br from-warning-50 to-warning-100 border-warning-200">
+<Card 
+          className="p-6 bg-gradient-to-br from-warning-50 to-warning-100 border-warning-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
+          onClick={() => navigate('/tasks?status=in-progress')}
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-warning-600 font-medium">In Progress</p>
@@ -331,7 +337,10 @@ const getTaskStats = () => {
           </div>
         </Card>
 
-        <Card className="p-6 bg-gradient-to-br from-error-50 to-error-100 border-error-200">
+<Card 
+          className="p-6 bg-gradient-to-br from-error-50 to-error-100 border-error-200 cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-[1.02]"
+          onClick={() => navigate('/tasks?status=overdue')}
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-error-600 font-medium">Overdue Tasks</p>
