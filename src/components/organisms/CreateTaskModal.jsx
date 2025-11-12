@@ -6,6 +6,7 @@ import Button from "@/components/atoms/Button";
 import { taskService } from "@/services/api/taskService";
 import { projectService } from "@/services/api/projectService";
 import { teamService } from "@/services/api/teamService";
+import { notificationService } from "@/services/api/notificationService";
 import { toast } from "react-toastify";
 
 const CreateTaskModal = ({ task = null, projectId = null, onClose, onSuccess }) => {
@@ -89,19 +90,83 @@ const CreateTaskModal = ({ task = null, projectId = null, onClose, onSuccess }) 
     }
 
     setLoading(true);
-
-    try {
+try {
       const taskData = {
         ...formData,
         dueDate: new Date(formData.dueDate).toISOString()
       };
 
+      let result;
       if (task) {
-        await taskService.update(task.id, taskData);
+        result = await taskService.update(task.id, taskData);
         toast.success("Task updated successfully!");
       } else {
-        await taskService.create(taskData);
+        result = await taskService.create(taskData);
         toast.success("Task created successfully!");
+        
+        // For new tasks with assignments, send notifications
+        if (taskData.assignedTo) {
+          try {
+            const assignee = teamMembers.find(m => m.id === parseInt(taskData.assignedTo));
+            if (assignee) {
+              // Create in-app notification
+              await notificationService.create({
+                type: 'task_assigned',
+                title: 'New Task Assignment',
+                message: `You have been assigned to task: ${taskData.name}`,
+                relatedId: result.id,
+                relatedType: 'task',
+                userId: assignee.id
+              });
+              
+              // Send email notification via Edge function
+              try {
+                // Get project name if available
+                let projectName = null;
+                if (taskData.projectId) {
+                  try {
+                    const project = await projectService.getById(taskData.projectId);
+                    projectName = project?.name;
+                  } catch (error) {
+                    // Project not found, continue without project name
+                  }
+                }
+                
+                // Initialize ApperClient for Edge function
+                const { ApperClient } = window.ApperSDK;
+                const apperClient = new ApperClient({
+                  apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+                  apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+                });
+                
+                const emailResult = await apperClient.functions.invoke(import.meta.env.VITE_SEND_TASK_ASSIGNMENT_EMAIL, {
+                  body: JSON.stringify({
+                    taskName: taskData.name,
+                    taskDescription: taskData.description,
+                    assigneeName: assignee.name,
+                    assigneeEmail: assignee.email,
+                    assignerName: 'System', // Could be enhanced to track actual assigner
+                    dueDate: taskData.dueDate,
+                    priority: taskData.priority,
+                    projectName: projectName
+                  }),
+                  headers: {
+                    'Content-Type': 'application/json'
+                  }
+                });
+                
+                if (!emailResult.success) {
+                  console.info(`apper_info: Got an error in this function: ${import.meta.env.VITE_SEND_TASK_ASSIGNMENT_EMAIL}. The response body is: ${JSON.stringify(emailResult)}.`);
+                }
+              } catch (emailError) {
+                console.info(`apper_info: Got this error an this function: ${import.meta.env.VITE_SEND_TASK_ASSIGNMENT_EMAIL}. The error is: ${emailError.message}`);
+              }
+            }
+          } catch (notificationError) {
+            // Don't fail the task creation, just log the error
+            console.error('Failed to send assignment notifications:', notificationError);
+          }
+        }
       }
 
       onSuccess?.();

@@ -41,7 +41,7 @@ class NotificationService {
     return this.notifications.length;
   }
 
-  async create(notificationData) {
+async create(notificationData) {
     await this.delay(150);
     
     const newNotification = {
@@ -54,7 +54,6 @@ class NotificationService {
     this.notifications.push(newNotification);
     return { ...newNotification };
   }
-
   async delete(id) {
     await this.delay(100);
     
