@@ -168,7 +168,7 @@ function Tasks() {
         
         <div className="flex items-center gap-4">
           <Button
-            onClick={() => navigate('/dashboard')}
+onClick={() => navigate('/')}>
             variant="ghost"
             size="sm"
             className="flex items-center gap-2 text-secondary-600 hover:text-secondary-800"
