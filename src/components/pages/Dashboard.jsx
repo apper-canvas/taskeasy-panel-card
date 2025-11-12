@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { useOutletContext, useNavigate } from "react-router-dom";
-import Card from "@/components/atoms/Card";
-import Button from "@/components/atoms/Button";
-import Badge from "@/components/atoms/Badge";
-import ProgressBar from "@/components/atoms/ProgressBar";
-import Avatar from "@/components/atoms/Avatar";
-import TaskCard from "@/components/molecules/TaskCard";
-import ProjectCard from "@/components/molecules/ProjectCard";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { projectService } from "@/services/api/projectService";
+import { taskService } from "@/services/api/taskService";
+import { teamService } from "@/services/api/teamService";
+import { endOfWeek, format, isAfter, startOfWeek } from "date-fns";
+import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
 import Loading from "@/components/ui/Loading";
 import ErrorView from "@/components/ui/ErrorView";
 import Empty from "@/components/ui/Empty";
+import ProjectCard from "@/components/molecules/ProjectCard";
+import TaskCard from "@/components/molecules/TaskCard";
+import Projects from "@/components/pages/Projects";
+import Team from "@/components/pages/Team";
 import ConfirmModal from "@/components/organisms/ConfirmModal";
 import CreateTaskModal from "@/components/organisms/CreateTaskModal";
-import { projectService } from "@/services/api/projectService";
-import { taskService } from "@/services/api/taskService";
-import { teamService } from "@/services/api/teamService";
-import { format, isAfter, startOfWeek, endOfWeek } from "date-fns";
-import { toast } from "react-toastify";
+import Card from "@/components/atoms/Card";
+import Button from "@/components/atoms/Button";
+import ProgressBar from "@/components/atoms/ProgressBar";
+import Badge from "@/components/atoms/Badge";
+import Avatar from "@/components/atoms/Avatar";
 
 const Dashboard = () => {
   const { searchTerm } = useOutletContext() || {};
@@ -83,12 +85,44 @@ const Dashboard = () => {
 
   // Dashboard calculations
 const getProjectStats = async () => {
-    const totalProjects = projects.length;
+    // Return zero stats when no projects exist
+    if (!projects || projects.length === 0) {
+      return { 
+        totalProjects: 0, 
+        activeProjects: 0, 
+        completedProjects: 0,
+        projectProgress: 0 
+      };
+    }
+
+    // Filter out any sample/mock data - only count user-created projects
+    const userProjects = projects.filter(project => 
+      project && 
+      project.name && 
+      project.name.trim() !== '' &&
+      !project.name.toLowerCase().includes('sample') &&
+      !project.name.toLowerCase().includes('example') &&
+      !project.name.toLowerCase().includes('demo')
+    );
+
+    // If no real user projects exist, return zero counts
+    if (userProjects.length === 0) {
+      return { 
+        totalProjects: 0, 
+        activeProjects: 0, 
+        completedProjects: 0,
+        projectProgress: 0 
+      };
+    }
+
+const totalProjects = userProjects.length;
+    const activeProjects = userProjects.filter(p => p.status === "Active").length;
+    const completedProjects = userProjects.filter(p => p.status === "Completed").length;
     
     try {
       // Get actual task data from service
       const allTasks = await taskService.getAll();
-      
+        
       // Filter out any sample/mock data - only count user-created tasks
       // Assuming user-created tasks have meaningful data vs. placeholder content
       const userTasks = allTasks.filter(task => 
@@ -104,6 +138,8 @@ const getProjectStats = async () => {
       if (userTasks.length === 0) {
         return {
           totalProjects,
+          activeProjects,
+          completedProjects,
           completedTasks: 0,
           inProgressTasks: 0,
           overdueTasks: 0
@@ -125,6 +161,8 @@ const getProjectStats = async () => {
       
       return { 
         totalProjects, 
+        activeProjects,
+        completedProjects,
         completedTasks, 
         inProgressTasks, 
         overdueTasks 
@@ -133,6 +171,8 @@ const getProjectStats = async () => {
       // If service fails, return zero counts
       return {
         totalProjects,
+        activeProjects,
+        completedProjects,
         completedTasks: 0,
         inProgressTasks: 0,
         overdueTasks: 0
