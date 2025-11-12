@@ -82,16 +82,19 @@ const Dashboard = () => {
   };
 
   // Dashboard calculations
-const getProjectStats = () => {
+const getProjectStats = async () => {
     const totalProjects = projects.length;
     
-    // Calculate task statistics
-    const completedTasks = tasks.filter(task => task.status === "Completed").length;
-    const inProgressTasks = tasks.filter(task => task.status === "In Progress").length;
+    // Get actual task data from service
+    const allTasks = await taskService.getAll();
+    
+    // Calculate task statistics from real data
+    const completedTasks = allTasks.filter(task => task.status === "Completed").length;
+    const inProgressTasks = allTasks.filter(task => task.status === "In Progress").length;
     
     // Calculate overdue tasks (past due date and not completed)
     const currentDate = new Date();
-    const overdueTasks = tasks.filter(task => {
+    const overdueTasks = allTasks.filter(task => {
       if (task.status === "Completed") return false;
       if (!task.dueDate) return false;
       const dueDate = new Date(task.dueDate);
