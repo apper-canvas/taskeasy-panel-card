@@ -166,9 +166,9 @@ function Tasks() {
           </p>
         </div>
         
-        <div className="flex items-center gap-4">
+<div className="flex items-center gap-4">
           <Button
-onClick={() => navigate('/')}>
+            onClick={() => navigate('/')}
             variant="ghost"
             size="sm"
             className="flex items-center gap-2 text-secondary-600 hover:text-secondary-800"
@@ -179,8 +179,8 @@ onClick={() => navigate('/')}>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-3 sm:justify-end">
-<FilterDropdown
+<div className="flex flex-wrap gap-3 sm:justify-end">
+        <FilterDropdown
           options={statusOptions}
           value={statusFilter}
           onChange={setStatusFilter}
