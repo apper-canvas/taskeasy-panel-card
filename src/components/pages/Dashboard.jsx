@@ -85,28 +85,59 @@ const Dashboard = () => {
 const getProjectStats = async () => {
     const totalProjects = projects.length;
     
-    // Get actual task data from service
-    const allTasks = await taskService.getAll();
-    
-    // Calculate task statistics from real data
-    const completedTasks = allTasks.filter(task => task.status === "Completed").length;
-    const inProgressTasks = allTasks.filter(task => task.status === "In Progress").length;
-    
-    // Calculate overdue tasks (past due date and not completed)
-    const currentDate = new Date();
-    const overdueTasks = allTasks.filter(task => {
-      if (task.status === "Completed") return false;
-      if (!task.dueDate) return false;
-      const dueDate = new Date(task.dueDate);
-      return dueDate < currentDate;
-    }).length;
-    
-    return { 
-      totalProjects, 
-      completedTasks, 
-      inProgressTasks, 
-      overdueTasks 
-    };
+    try {
+      // Get actual task data from service
+      const allTasks = await taskService.getAll();
+      
+      // Filter out any sample/mock data - only count user-created tasks
+      // Assuming user-created tasks have meaningful data vs. placeholder content
+      const userTasks = allTasks.filter(task => 
+        task && 
+        task.title && 
+        task.title.trim() !== '' &&
+        !task.title.toLowerCase().includes('sample') &&
+        !task.title.toLowerCase().includes('example') &&
+        !task.title.toLowerCase().includes('demo')
+      );
+      
+      // If no real user tasks exist, return zero counts
+      if (userTasks.length === 0) {
+        return {
+          totalProjects,
+          completedTasks: 0,
+          inProgressTasks: 0,
+          overdueTasks: 0
+        };
+      }
+      
+      // Calculate task statistics from real user data only
+      const completedTasks = userTasks.filter(task => task.status === "Completed").length;
+      const inProgressTasks = userTasks.filter(task => task.status === "In Progress").length;
+      
+      // Calculate overdue tasks (past due date and not completed)
+      const currentDate = new Date();
+      const overdueTasks = userTasks.filter(task => {
+        if (task.status === "Completed") return false;
+        if (!task.dueDate) return false;
+        const dueDate = new Date(task.dueDate);
+        return dueDate < currentDate;
+      }).length;
+      
+      return { 
+        totalProjects, 
+        completedTasks, 
+        inProgressTasks, 
+        overdueTasks 
+      };
+    } catch (error) {
+      // If service fails, return zero counts
+      return {
+        totalProjects,
+        completedTasks: 0,
+        inProgressTasks: 0,
+        overdueTasks: 0
+      };
+    }
   };
 
 const getTaskStats = () => {
