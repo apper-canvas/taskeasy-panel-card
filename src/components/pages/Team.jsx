@@ -181,23 +181,23 @@ const navigate = useNavigate();
           >
             <div className="flex items-center gap-3">
               <ApperIcon name="CheckSquare" className="w-8 h-8 text-success-600" />
-              <div>
-                <p className="text-sm text-success-600 font-medium">Active Tasks</p>
+</div>
+                <div className="text-center">
                 <p className="text-2xl font-bold text-success-900">
-                  {tasks.filter(t => t.status !== "Completed").length}
+                  {tasks.filter(task => task.status === "To Do" || task.status === "In Progress").length}
                 </p>
-              </div>
+                <p className="text-sm text-secondary-600 mt-1">Active Tasks</p>
             </div>
           </button>
 
-          <div className="bg-gradient-to-r from-warning-50 to-warning-100 p-4 rounded-lg border border-warning-200">
+<div className="bg-gradient-to-r from-warning-50 to-warning-100 p-4 rounded-lg border border-warning-200">
             <div className="flex items-center gap-3">
               <ApperIcon name="Clock" className="w-8 h-8 text-warning-600" />
               <div>
-                <p className="text-sm text-warning-600 font-medium">Avg. Tasks per Member</p>
+                <p className="text-sm text-warning-600 font-medium">Avg Tasks/Member</p>
                 <p className="text-2xl font-bold text-warning-900">
                   {teamMembers.length > 0 
-                    ? Math.round(tasks.filter(t => t.status !== "Completed").length / teamMembers.length)
+                    ? Math.round(tasks.filter(task => task.status === "To Do" || task.status === "In Progress").length / teamMembers.length)
                     : 0
                   }
                 </p>
