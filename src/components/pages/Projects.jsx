@@ -17,7 +17,8 @@ import Button from "@/components/atoms/Button";
 
 const Projects = () => {
   const { searchTerm } = useOutletContext() || {};
-  const [projects, setProjects] = useState([]);
+const [projects, setProjects] = useState([]);
+  const [previousProjects, setPreviousProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
@@ -35,11 +36,12 @@ const Projects = () => {
     loadProjects();
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
     filterProjects();
+    checkForCompletedProjects();
   }, [projects, tasks, searchTerm, statusFilter, memberFilter]);
 
-  const loadProjects = async () => {
+const loadProjects = async () => {
     setLoading(true);
     setError("");
 
@@ -50,6 +52,8 @@ const Projects = () => {
         teamService.getAll()
       ]);
 
+      // Store previous projects state for completion detection
+      setPreviousProjects([...projects]);
       setProjects(projectsData);
       setTasks(tasksData);
       setTeamMembers(membersData);
@@ -58,6 +62,33 @@ const Projects = () => {
       setError("Failed to load projects. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const checkForCompletedProjects = async () => {
+    if (!projects.length || !tasks.length || !teamMembers.length || !previousProjects.length) {
+      return;
+    }
+
+    const { default: congratulationsService } = await import('@/services/api/congratulationsService');
+    
+    // Check each project for completion status change
+    for (const currentProject of projects) {
+      const previousProject = previousProjects.find(p => p.Id === currentProject.Id);
+      
+      if (!previousProject) continue; // Skip new projects
+      
+      const currentCompletion = await congratulationsService.checkProjectCompletion(currentProject, tasks);
+      const previousCompletion = await congratulationsService.checkProjectCompletion(previousProject, tasks);
+      
+      // Check if project just became completed
+      if (!previousCompletion.isCompleted && currentCompletion.isCompleted) {
+        // Send congratulations to team
+        await congratulationsService.sendProjectCompletionCongratulations(
+          currentProject, 
+          teamMembers
+        );
+      }
     }
   };
 
@@ -118,7 +149,7 @@ const Projects = () => {
       // Then delete the project
       await projectService.delete(projectToDelete);
       toast.success("Project deleted successfully");
-      setProjectToDelete(null);
+setProjectToDelete(null);
       loadProjects();
     } catch (error) {
       console.error("Failed to delete project:", error);

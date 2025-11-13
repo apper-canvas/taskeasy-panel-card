@@ -34,21 +34,29 @@ this.projects = [];
     return { ...newProject };
   }
 
-  async update(id, projectData) {
+async update(id, projectData) {
     await this.delay(350);
     
-    const index = this.projects.findIndex(p => p.id === parseInt(id));
+    const index = this.projects.findIndex(p => p.Id === parseInt(id));
     if (index === -1) {
       throw new Error(`Project with id ${id} not found`);
     }
     
+    const previousProject = { ...this.projects[index] };
+    
     this.projects[index] = {
       ...this.projects[index],
       ...projectData,
-      id: parseInt(id) // Ensure id remains integer
+      Id: parseInt(id) // Ensure Id remains integer
     };
     
-    return { ...this.projects[index] };
+    const updatedProject = { ...this.projects[index] };
+    
+    // Check if project completion status might have changed
+    // This will be properly detected in the Projects component
+    // when it compares task completion ratios
+    
+    return updatedProject;
   }
 
   async delete(id) {
