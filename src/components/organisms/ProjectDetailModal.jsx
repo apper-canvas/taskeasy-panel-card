@@ -15,7 +15,7 @@ import { teamService } from "@/services/api/teamService";
 import { format } from "date-fns";
 
 const ProjectDetailModal = ({ project, isOpen, onClose }) => {
-  const [activeTab, setActiveTab] = useState("overview");
+const [activeTab, setActiveTab] = useState("overview");
   const [tasks, setTasks] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
@@ -23,7 +23,6 @@ const ProjectDetailModal = ({ project, isOpen, onClose }) => {
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [statusFilter, setStatusFilter] = useState([]);
   const [priorityFilter, setPriorityFilter] = useState([]);
-
   const tabs = [
     { id: "overview", label: "Overview", icon: "FileText" },
     { id: "tasks", label: "Tasks", icon: "CheckSquare" },
@@ -34,7 +33,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }) => {
     if (isOpen && project) {
       loadProjectData();
     }
-  }, [isOpen, project]);
+}, [isOpen, project]);
 
   useEffect(() => {
     filterTasks();
@@ -50,9 +49,10 @@ const ProjectDetailModal = ({ project, isOpen, onClose }) => {
 
       setTasks(projectTasks);
       
-      // Filter team members assigned to this project
+      // Filter team members assigned to this project - ensure assignedMembers is an array
+      const assignedMemberIds = Array.isArray(project.assignedMembers) ? project.assignedMembers : [];
       const assignedMembers = allMembers.filter(member => 
-        project.assignedMembers?.includes(member.id)
+        assignedMemberIds.includes(member.id)
       );
       setTeamMembers(assignedMembers);
     } catch (error) {
@@ -104,8 +104,10 @@ const ProjectDetailModal = ({ project, isOpen, onClose }) => {
               {project.description && (
                 <p className="text-primary-700 mt-2">{project.description}</p>
               )}
-            </div>
-            <Badge variant="primary">Active</Badge>
+</div>
+            <Badge variant={project.status === "Completed" ? "success" : "primary"}>
+              {project.status || "Active"}
+            </Badge>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -228,15 +230,17 @@ const ProjectDetailModal = ({ project, isOpen, onClose }) => {
 
   const renderTeam = () => {
     return (
-      <div className="space-y-4">
+<div className="space-y-4">
         {teamMembers.length === 0 ? (
           <Empty
             title="No team members assigned"
-            description="This project doesn't have any team members assigned yet"
+            description={project.status === "Completed" 
+              ? "This completed project had no team members assigned" 
+              : "This project doesn't have any team members assigned yet"}
             icon="Users"
           />
         ) : (
-          <div className="grid gap-4">
+<div className="grid gap-4">
             {teamMembers.map((member) => {
               const memberTaskCount = tasks.filter(t => t.assignedTo === member.id && t.status !== "Completed").length;
               return (
@@ -244,6 +248,7 @@ const ProjectDetailModal = ({ project, isOpen, onClose }) => {
                   key={member.id}
                   member={member}
                   taskCount={memberTaskCount}
+                  showStatus={project.status === "Completed"}
                 />
               );
             })}

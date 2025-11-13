@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
-import Modal from "@/components/organisms/Modal";
-import Input from "@/components/atoms/Input";
-import Select from "@/components/atoms/Select";
-import Button from "@/components/atoms/Button";
-import FilterDropdown from "@/components/molecules/FilterDropdown";
+import React, { useEffect, useState } from "react";
 import { projectService } from "@/services/api/projectService";
 import { teamService } from "@/services/api/teamService";
 import { toast } from "react-toastify";
+import FilterDropdown from "@/components/molecules/FilterDropdown";
+import Team from "@/components/pages/Team";
+import Modal from "@/components/organisms/Modal";
+import Select from "@/components/atoms/Select";
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
 
 const CreateProjectModal = ({ project = null, onClose, onSuccess }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     name: "",
     description: "",
     startDate: "",
@@ -24,12 +25,12 @@ const CreateProjectModal = ({ project = null, onClose, onSuccess }) => {
     loadTeamMembers();
     
     if (project) {
-      setFormData({
+setFormData({
         name: project.name || "",
         description: project.description || "",
         startDate: project.startDate ? project.startDate.split("T")[0] : "",
         dueDate: project.dueDate ? project.dueDate.split("T")[0] : "",
-        assignedMembers: project.assignedMembers || []
+        assignedMembers: Array.isArray(project.assignedMembers) ? project.assignedMembers : []
       });
     }
   }, [project]);
@@ -76,10 +77,11 @@ const CreateProjectModal = ({ project = null, onClose, onSuccess }) => {
     setLoading(true);
 
     try {
-      const projectData = {
+const projectData = {
         ...formData,
         startDate: new Date(formData.startDate).toISOString(),
-        dueDate: new Date(formData.dueDate).toISOString()
+        dueDate: new Date(formData.dueDate).toISOString(),
+        assignedMembers: Array.isArray(formData.assignedMembers) ? formData.assignedMembers : []
       };
 
       if (project) {
@@ -161,17 +163,20 @@ const CreateProjectModal = ({ project = null, onClose, onSuccess }) => {
           />
         </div>
 
-        <div className="space-y-1">
+<div className="space-y-1">
           <label className="block text-sm font-medium text-secondary-700">
-            Assign Team Members
+            Assign Team Members {project?.status === "Completed" && (
+              <span className="text-warning-600 text-xs">(Cannot modify completed projects)</span>
+            )}
           </label>
           <FilterDropdown
             label="Select team members"
             options={memberOptions}
-            selectedValues={formData.assignedMembers}
-            onSelectionChange={(values) => handleChange("assignedMembers", values)}
+            selectedValues={Array.isArray(formData.assignedMembers) ? formData.assignedMembers : []}
+            onSelectionChange={(values) => handleChange("assignedMembers", Array.isArray(values) ? values : [])}
             multiSelect={true}
             className="w-full"
+            disabled={project?.status === "Completed"}
           />
         </div>
 

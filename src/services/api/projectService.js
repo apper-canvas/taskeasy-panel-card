@@ -22,11 +22,12 @@ this.projects = [];
   async create(projectData) {
     await this.delay(400);
     
-    const newProject = {
+const newProject = {
       id: Math.max(...this.projects.map(p => p.id), 0) + 1,
       ...projectData,
       status: "Active",
       completionPercentage: 0,
+      assignedMembers: projectData.assignedMembers || [],
       createdAt: new Date().toISOString()
     };
     
@@ -44,9 +45,16 @@ async update(id, projectData) {
     
     const previousProject = { ...this.projects[index] };
     
+    // Check if project is completed/closed and prevent member assignment changes
+    if (previousProject.status === "Completed" && projectData.assignedMembers && 
+        JSON.stringify(projectData.assignedMembers) !== JSON.stringify(previousProject.assignedMembers)) {
+      throw new Error("Cannot modify team member assignments for completed projects");
+    }
+    
     this.projects[index] = {
       ...this.projects[index],
       ...projectData,
+      assignedMembers: projectData.assignedMembers || this.projects[index].assignedMembers || [],
       id: parseInt(id) // Ensure id remains integer
     };
     

@@ -272,7 +272,7 @@ const getTaskStats = () => {
     );
   }
 
-  const projectStats = getProjectStats();
+const projectStats = getProjectStats();
   const taskStats = getTaskStats();
   const upcomingTasks = getUpcomingTasks();
   const recentProjects = getRecentProjects();

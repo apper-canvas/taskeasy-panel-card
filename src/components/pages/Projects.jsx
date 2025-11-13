@@ -19,7 +19,7 @@ const Projects = () => {
   const { searchTerm } = useOutletContext() || {};
 const [projects, setProjects] = useState([]);
   const [previousProjects, setPreviousProjects] = useState([]);
-  const [tasks, setTasks] = useState([]);
+const [tasks, setTasks] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,16 +31,14 @@ const [projects, setProjects] = useState([]);
   const [projectToDelete, setProjectToDelete] = useState(null);
   const [statusFilter, setStatusFilter] = useState([]);
   const [memberFilter, setMemberFilter] = useState([]);
-
   useEffect(() => {
     loadProjects();
   }, []);
 
 useEffect(() => {
-    filterProjects();
+filterProjects();
     checkForCompletedProjects();
   }, [projects, tasks, searchTerm, statusFilter, memberFilter]);
-
 const loadProjects = async () => {
     setLoading(true);
     setError("");
@@ -54,7 +52,14 @@ const loadProjects = async () => {
 
       // Store previous projects state for completion detection
       setPreviousProjects([...projects]);
-      setProjects(projectsData);
+      
+      // Ensure assignedMembers is always an array for all projects
+      const normalizedProjects = projectsData.map(project => ({
+        ...project,
+        assignedMembers: Array.isArray(project.assignedMembers) ? project.assignedMembers : []
+      }));
+      
+      setProjects(normalizedProjects);
       setTasks(tasksData);
       setTeamMembers(membersData);
     } catch (err) {
@@ -65,7 +70,7 @@ const loadProjects = async () => {
     }
   };
 
-  const checkForCompletedProjects = async () => {
+const checkForCompletedProjects = async () => {
     if (!projects.length || !tasks.length || !teamMembers.length || !previousProjects.length) {
       return;
     }
@@ -74,20 +79,29 @@ const loadProjects = async () => {
     
     // Check each project for completion status change
     for (const currentProject of projects) {
-      const previousProject = previousProjects.find(p => p.Id === currentProject.Id);
+      const previousProject = previousProjects.find(p => p.id === currentProject.id);
       
       if (!previousProject) continue; // Skip new projects
       
       const currentCompletion = await congratulationsService.checkProjectCompletion(currentProject, tasks);
       const previousCompletion = await congratulationsService.checkProjectCompletion(previousProject, tasks);
       
-      // Check if project just became completed
+      // Check if project just became completed and update status
       if (!previousCompletion.isCompleted && currentCompletion.isCompleted) {
-        // Send congratulations to team
-        await congratulationsService.sendProjectCompletionCongratulations(
-          currentProject, 
-          teamMembers
+        // Update project status to Completed
+        await projectService.update(currentProject.id, { status: "Completed" });
+        
+        // Send congratulations to assigned team members only
+        const assignedTeamMembers = teamMembers.filter(member => 
+          currentProject.assignedMembers?.includes(member.id)
         );
+        
+        if (assignedTeamMembers.length > 0) {
+          await congratulationsService.sendProjectCompletionCongratulations(
+            currentProject, 
+            assignedTeamMembers
+          );
+        }
       }
     }
   };
@@ -105,11 +119,11 @@ const loadProjects = async () => {
     }
 
     // Status filter
-    if (statusFilter.length > 0) {
+if (statusFilter.length > 0) {
       filtered = filtered.filter(project => {
         const projectTasks = tasks.filter(t => t.projectId === project.id);
         const completedTasks = projectTasks.filter(t => t.status === "Completed");
-        const isCompleted = projectTasks.length > 0 && completedTasks.length === projectTasks.length;
+        const isCompleted = project.status === "Completed" || (projectTasks.length > 0 && completedTasks.length === projectTasks.length);
         
         if (statusFilter.includes("Active") && !isCompleted) return true;
         if (statusFilter.includes("Completed") && isCompleted) return true;
@@ -117,11 +131,12 @@ const loadProjects = async () => {
       });
     }
 
-    // Member filter
+// Member filter
     if (memberFilter.length > 0) {
-      filtered = filtered.filter(project =>
-        project.assignedMembers?.some(memberId => memberFilter.includes(memberId))
-      );
+      filtered = filtered.filter(project => {
+        const assignedMemberIds = Array.isArray(project.assignedMembers) ? project.assignedMembers : [];
+        return assignedMemberIds.some(memberId => memberFilter.includes(memberId));
+      });
     }
 
     setFilteredProjects(filtered);
@@ -183,7 +198,7 @@ setProjectToDelete(null);
     { value: "Completed", label: "Completed Projects" }
   ];
 
-  const memberOptions = teamMembers.map(member => ({
+const memberOptions = teamMembers.map(member => ({
     value: member.id,
     label: member.name
   }));
@@ -213,14 +228,14 @@ setProjectToDelete(null);
             onSelectionChange={setStatusFilter}
           />
 
-          <FilterDropdown
+<FilterDropdown
             label="Team Member"
             options={memberOptions}
             selectedValues={memberFilter}
             onSelectionChange={setMemberFilter}
           />
 
-          {(statusFilter.length > 0 || memberFilter.length > 0) && (
+{(statusFilter.length > 0 || memberFilter.length > 0) && (
             <Button
               variant="ghost"
               size="sm"
@@ -257,10 +272,11 @@ setProjectToDelete(null);
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProjects.map((project) => {
-            const projectTasks = tasks.filter(t => t.projectId === project.id);
+const projectTasks = tasks.filter(t => t.projectId === project.id);
             const completedTasks = projectTasks.filter(t => t.status === "Completed");
+            const assignedMemberIds = Array.isArray(project.assignedMembers) ? project.assignedMembers : [];
             const assignedMembers = teamMembers.filter(m => 
-              project.assignedMembers?.includes(m.id)
+              assignedMemberIds.includes(m.id)
             );
 
             return (
@@ -290,14 +306,14 @@ setProjectToDelete(null);
           onSuccess={handleCreateProject}
         />
       )}
-
-      {showProjectDetail && selectedProject && (
+{showProjectDetail && selectedProject && (
         <ProjectDetailModal
           project={selectedProject}
           isOpen={showProjectDetail}
           onClose={() => {
             setShowProjectDetail(false);
             setSelectedProject(null);
+            loadProjects(); // Refresh data when closing detail modal
           }}
         />
       )}
