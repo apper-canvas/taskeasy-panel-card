@@ -63,8 +63,13 @@ function Tasks() {
     }
   };
 
-  const getFilteredTasks = () => {
-let filtered = tasks.filter(task => {
+const getFilteredTasks = () => {
+    // Ensure tasks is an array
+    if (!Array.isArray(tasks)) {
+      return [];
+    }
+
+    let filtered = tasks.filter(task => {
       // Filter out sample/mock data
       if (!task || !task.title || task.title.trim() === '' ||
           task.title.toLowerCase().includes('sample') ||
@@ -74,36 +79,6 @@ let filtered = tasks.filter(task => {
       }
       return true;
     });
-
-    // Show empty state when no legitimate tasks exist
-    if (filtered.length === 0) {
-      return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-          <div className="max-w-7xl mx-auto px-6 py-8">
-            <div className="flex justify-between items-center mb-8">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Tasks</h1>
-                <p className="text-gray-600">Manage and track your team's tasks</p>
-              </div>
-              <Button 
-                onClick={() => setShowCreateModal(true)}
-                className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600"
-              >
-                <ApperIcon name="Plus" size={16} />
-                Add Task
-              </Button>
-            </div>
-            <Empty
-              title="No tasks yet"
-              description="Create your first task to get started with managing your team's work."
-              actionLabel="Create Task"
-              onAction={() => setShowCreateModal(true)}
-              icon="CheckSquare"
-            />
-          </div>
-        </div>
-      );
-    }
 
 // Continue with existing filtering logic for search and status
     // (No additional filtering needed here as search and status filters are applied below)
