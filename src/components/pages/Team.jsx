@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { teamService } from "@/services/api/teamService";
 import { taskService } from "@/services/api/taskService";
 import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
-import Loading from "@/components/ui/Loading";
-import ErrorView from "@/components/ui/ErrorView";
-import Empty from "@/components/ui/Empty";
-import MemberCard from "@/components/molecules/MemberCard";
 import FilterDropdown from "@/components/molecules/FilterDropdown";
+import MemberCard from "@/components/molecules/MemberCard";
+import Loading from "@/components/ui/Loading";
+import Empty from "@/components/ui/Empty";
+import ErrorView from "@/components/ui/ErrorView";
 import Tasks from "@/components/pages/Tasks";
 import ConfirmModal from "@/components/organisms/ConfirmModal";
 import CreateMemberModal from "@/components/organisms/CreateMemberModal";
@@ -25,6 +25,19 @@ const Team = () => {
   const [memberToEdit, setMemberToEdit] = useState(null);
   const [memberToDelete, setMemberToDelete] = useState(null);
   const [roleFilter, setRoleFilter] = useState([]);
+
+const navigate = useNavigate();
+
+  const handleActiveTasks = () => {
+    // Navigate to Tasks page with active status filter
+    navigate('/tasks?status=in-progress');
+    toast.info('Showing active tasks');
+  };
+
+  const handleTotalMembers = () => {
+    // Show member information
+    toast.info(`Total team members: ${teamMembers.length}`);
+  };
 
   useEffect(() => {
     loadTeamData();
@@ -148,8 +161,11 @@ const Team = () => {
 
 {/* Team Stats */}
       {teamMembers.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-gradient-to-r from-primary-50 to-primary-100 p-4 rounded-lg border border-primary-200">
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button 
+            onClick={handleTotalMembers}
+            className="bg-gradient-to-r from-primary-50 to-primary-100 p-4 rounded-lg border border-primary-200 hover:from-primary-100 hover:to-primary-150 hover:border-primary-300 transition-all duration-200 hover:shadow-md cursor-pointer text-left w-full"
+          >
             <div className="flex items-center gap-3">
               <ApperIcon name="Users" className="w-8 h-8 text-primary-600" />
               <div>
@@ -157,9 +173,12 @@ const Team = () => {
                 <p className="text-2xl font-bold text-primary-900">{teamMembers.length}</p>
               </div>
             </div>
-          </div>
+          </button>
 
-          <div className="bg-gradient-to-r from-success-50 to-success-100 p-4 rounded-lg border border-success-200">
+          <button 
+            onClick={handleActiveTasks}
+            className="bg-gradient-to-r from-success-50 to-success-100 p-4 rounded-lg border border-success-200 hover:from-success-100 hover:to-success-150 hover:border-success-300 transition-all duration-200 hover:shadow-md cursor-pointer text-left w-full"
+          >
             <div className="flex items-center gap-3">
               <ApperIcon name="CheckSquare" className="w-8 h-8 text-success-600" />
               <div>
@@ -169,7 +188,7 @@ const Team = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </button>
 
           <div className="bg-gradient-to-r from-warning-50 to-warning-100 p-4 rounded-lg border border-warning-200">
             <div className="flex items-center gap-3">
