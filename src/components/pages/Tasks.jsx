@@ -176,14 +176,14 @@ const getFilteredTasks = () => {
         </div>
         
 <div className="flex items-center gap-4">
-          <Button
-onClick={() => navigate('/team')}
+<Button
+            onClick={() => navigate('/')}
             variant="ghost"
             size="sm"
             className="flex items-center gap-2 text-secondary-600 hover:text-secondary-800"
           >
             <ApperIcon name="ArrowLeft" size={16} />
-            Back to Team
+            Back to Dashboard
           </Button>
         </div>
       </div>
