@@ -192,17 +192,16 @@ const getTaskStats = () => {
       };
     }
 
-    // Filter out any sample/mock data - only count user-created tasks
+// Filter out any sample/mock data - only count user-created tasks
     // Assuming user-created tasks have meaningful data vs. placeholder content
     const userTasks = tasks.filter(task => 
       task && 
-      task.name && 
-      task.name.trim() !== '' &&
-      !task.name.toLowerCase().includes('sample') &&
-      !task.name.toLowerCase().includes('example') &&
-      !task.name.toLowerCase().includes('demo')
+      task.title && 
+      task.title.trim() !== '' &&
+      !task.title.toLowerCase().includes('sample') &&
+      !task.title.toLowerCase().includes('example') &&
+      !task.title.toLowerCase().includes('demo')
     );
-
     // If no real user tasks exist, return zero counts
     if (userTasks.length === 0) {
       return { 
@@ -374,9 +373,9 @@ const projectStats = getProjectStats();
                   const isOverdue = isAfter(new Date(), new Date(task.dueDate));
                   
                   return (
-                    <div key={task.id} className="flex items-center gap-4 p-4 bg-secondary-50 rounded-lg">
+<div key={task.id} className="flex items-center gap-4 p-4 bg-secondary-50 rounded-lg">
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-secondary-900 truncate">{task.name}</h3>
+                        <h3 className="font-medium text-secondary-900 truncate">{task.title}</h3>
                         <div className="flex items-center gap-3 mt-1">
                           <Badge variant={task.priority.toLowerCase()}>
                             {task.priority}
