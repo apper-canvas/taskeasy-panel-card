@@ -62,9 +62,6 @@ const Chats = () => {
       setTeamMembers(teamData);
 
       // Set default sender to first team member if not selected
-      if (!selectedSender && teamData.length > 0) {
-        setSelectedSender(teamData[0].Id.toString());
-      }
 
     } catch (err) {
       setError(err.message);
