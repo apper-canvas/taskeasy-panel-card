@@ -37,7 +37,7 @@ this.projects = [];
 async update(id, projectData) {
     await this.delay(350);
     
-    const index = this.projects.findIndex(p => p.Id === parseInt(id));
+    const index = this.projects.findIndex(p => p.id === parseInt(id));
     if (index === -1) {
       throw new Error(`Project with id ${id} not found`);
     }
@@ -47,7 +47,7 @@ async update(id, projectData) {
     this.projects[index] = {
       ...this.projects[index],
       ...projectData,
-      Id: parseInt(id) // Ensure Id remains integer
+      id: parseInt(id) // Ensure id remains integer
     };
     
     const updatedProject = { ...this.projects[index] };
