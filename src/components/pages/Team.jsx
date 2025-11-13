@@ -179,14 +179,14 @@ const navigate = useNavigate();
             onClick={handleActiveTasks}
             className="bg-gradient-to-r from-success-50 to-success-100 p-4 rounded-lg border border-success-200 hover:from-success-100 hover:to-success-150 hover:border-success-300 transition-all duration-200 hover:shadow-md cursor-pointer text-left w-full"
           >
-            <div className="flex items-center gap-3">
+<div className="flex items-center gap-3">
               <ApperIcon name="CheckSquare" className="w-8 h-8 text-success-600" />
-</div>
-                <div className="text-center">
+              <div>
+                <p className="text-sm text-success-600 font-medium">Active Tasks</p>
                 <p className="text-2xl font-bold text-success-900">
                   {tasks.filter(task => task.status === "To Do" || task.status === "In Progress").length}
                 </p>
-                <p className="text-sm text-secondary-600 mt-1">Active Tasks</p>
+              </div>
             </div>
           </button>
 
