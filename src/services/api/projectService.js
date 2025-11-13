@@ -43,14 +43,13 @@ async update(id, projectData) {
       throw new Error(`Project with id ${id} not found`);
     }
     
-    const previousProject = { ...this.projects[index] };
+const previousProject = { ...this.projects[index] };
     
-    // Check if project is completed/closed and prevent member assignment changes
+    // Log warning for completed project modifications (but allow them)
     if (previousProject.status === "Completed" && projectData.assignedMembers && 
         JSON.stringify(projectData.assignedMembers) !== JSON.stringify(previousProject.assignedMembers)) {
-      throw new Error("Cannot modify team member assignments for completed projects");
+      console.info("Warning: Modifying team assignments for completed project:", previousProject.name);
     }
-    
     this.projects[index] = {
       ...this.projects[index],
       ...projectData,

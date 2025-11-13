@@ -126,14 +126,14 @@ const ProjectCard = ({
                 )}
               </div>
             </div>
-            <Button
+<Button
               variant="ghost"
               size="sm"
               onClick={(e) => {
                 e.stopPropagation();
                 onViewDetails?.(project);
               }}
-              className="text-primary-600"
+              className="text-primary-600 hover:text-primary-700"
             >
               View Details
             </Button>

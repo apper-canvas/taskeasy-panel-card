@@ -235,8 +235,8 @@ const [activeTab, setActiveTab] = useState("overview");
           <Empty
             title="No team members assigned"
             description={project.status === "Completed" 
-              ? "This completed project had no team members assigned" 
-              : "This project doesn't have any team members assigned yet"}
+              ? "This completed project had no assigned team members" 
+              : "No team members have been assigned to this project yet"}
             icon="Users"
           />
         ) : (

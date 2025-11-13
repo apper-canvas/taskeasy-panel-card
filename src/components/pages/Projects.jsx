@@ -85,23 +85,25 @@ const checkForCompletedProjects = async () => {
       
       const currentCompletion = await congratulationsService.checkProjectCompletion(currentProject, tasks);
       const previousCompletion = await congratulationsService.checkProjectCompletion(previousProject, tasks);
-      
-      // Check if project just became completed and update status
+// Check if project just became completed and update status
       if (!previousCompletion.isCompleted && currentCompletion.isCompleted) {
-        // Update project status to Completed
-        await projectService.update(currentProject.id, { status: "Completed" });
-        
-        // Send congratulations to assigned team members only
-        const assignedTeamMembers = teamMembers.filter(member => 
-          currentProject.assignedMembers?.includes(member.id)
-        );
-        
-        if (assignedTeamMembers.length > 0) {
-          await congratulationsService.sendProjectCompletionCongratulations(
-            currentProject, 
-            assignedTeamMembers
+        // Add small delay to prevent interference with active user workflows
+        setTimeout(async () => {
+          // Update project status to Completed
+          await projectService.update(currentProject.id, { status: "Completed" });
+          
+          // Send congratulations to assigned team members only
+          const assignedTeamMembers = teamMembers.filter(member => 
+            currentProject.assignedMembers?.includes(member.id)
           );
-        }
+          
+          if (assignedTeamMembers.length > 0) {
+            await congratulationsService.sendProjectCompletionCongratulations(
+              currentProject, 
+              assignedTeamMembers
+            );
+          }
+        }, 1000); // 1 second delay to allow current operations to complete
       }
     }
   };

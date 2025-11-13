@@ -166,7 +166,7 @@ const projectData = {
 <div className="space-y-1">
           <label className="block text-sm font-medium text-secondary-700">
             Assign Team Members {project?.status === "Completed" && (
-              <span className="text-warning-600 text-xs">(Cannot modify completed projects)</span>
+              <span className="text-warning-600 text-xs">(Modifying completed project team)</span>
             )}
           </label>
           <FilterDropdown
@@ -176,7 +176,7 @@ const projectData = {
             onSelectionChange={(values) => handleChange("assignedMembers", Array.isArray(values) ? values : [])}
             multiSelect={true}
             className="w-full"
-            disabled={project?.status === "Completed"}
+            disabled={false}
           />
         </div>
 
