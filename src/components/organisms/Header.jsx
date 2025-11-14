@@ -56,11 +56,12 @@ const Header = ({ onSearch, onAddClick }) => {
     }
   };
 
-  const navItems = [
-{ path: "/", label: "Dashboard", icon: "LayoutDashboard" },
+const navItems = [
+    { path: "/", label: "Dashboard", icon: "LayoutDashboard" },
     { path: "/projects", label: "Projects", icon: "FolderOpen" },
     { path: "/team", label: "Team", icon: "Users" },
-    { path: "/chats", label: "Chats", icon: "MessageCircle" }
+    { path: "/chats", label: "Chats", icon: "MessageCircle" },
+    { path: "/auth", label: "Login", icon: "LogIn" }
   ];
 
   const handleSearch = (term) => {
@@ -68,12 +69,14 @@ const Header = ({ onSearch, onAddClick }) => {
     onSearch?.(term);
   };
 
-  const getAddButtonLabel = () => {
+const getAddButtonLabel = () => {
     switch (location.pathname) {
       case "/projects":
         return "New Project";
       case "/team":
         return "Add Member";
+      case "/auth":
+        return "Sign Up";
       default:
         return "Quick Add";
     }
@@ -85,11 +88,12 @@ const Header = ({ onSearch, onAddClick }) => {
         return "FolderPlus";
       case "/team":
         return "UserPlus";
+      case "/auth":
+        return "UserPlus";
       default:
         return "Plus";
     }
   };
-
   return (
     <header className="bg-white border-b border-secondary-200 sticky top-0 z-40">
       <div className="px-4 sm:px-6 lg:px-8">
