@@ -20,17 +20,15 @@ const [messages, setMessages] = useState([]);
   const [filteredMessages, setFilteredMessages] = useState([]);
   const [projects, setProjects] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
-  const [conversations, setConversations] = useState([]);
+const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [conversationMessages, setConversationMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [sendingMessage, setSendingMessage] = useState(false);
-  
-  // Form state
+  const [selectedSender, setSelectedSender] = useState('');
   const [newMessage, setNewMessage] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
-  const [selectedSender, setSelectedSender] = useState('');
+const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [projectFilter, setProjectFilter] = useState('all');
   // Load initial data
 useEffect(() => {
@@ -41,11 +39,13 @@ useEffect(() => {
     loadConversations();
   }, [messages]);
 
-  useEffect(() => {
+useEffect(() => {
     if (selectedConversation) {
       loadConversationMessages();
     }
   }, [selectedConversation]);
+
+  // Import toast for notifications
 
   // Filter messages when filter changes
   useEffect(() => {
