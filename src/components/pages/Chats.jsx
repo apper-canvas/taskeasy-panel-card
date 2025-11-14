@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { formatDistanceToNow } from "date-fns";
+import { safeFormatDistanceToNow } from "@/utils/dateHelpers";
 import { chatService } from "@/services/api/chatService";
 import { projectService } from "@/services/api/projectService";
 import { teamService } from "@/services/api/teamService";
@@ -298,8 +298,8 @@ return (
                             </div>
                           </div>
                           {conversation.lastMessage && (
-                            <span className="text-xs text-secondary-500 ml-2 flex-shrink-0">
-                              {formatDistanceToNow(new Date(conversation.lastMessage.timestamp), { addSuffix: true })}
+<span className="text-xs text-secondary-500 ml-2 flex-shrink-0">
+                              {safeFormatDistanceToNow(conversation.lastMessage.timestamp)}
                             </span>
                           )}
                         </div>
@@ -360,8 +360,8 @@ return (
                             <span className="font-medium text-secondary-800 text-sm">
                               {message.senderName || 'Unknown User'}
                             </span>
-                            <span className="text-xs text-secondary-500">
-                              {formatDistanceToNow(new Date(message.timestamp), { addSuffix: true })}
+<span className="text-xs text-secondary-500">
+                              {safeFormatDistanceToNow(message.timestamp)}
                             </span>
                             <Badge variant="outline" className="text-xs">
                               {message.senderRole || 'Team Member'}

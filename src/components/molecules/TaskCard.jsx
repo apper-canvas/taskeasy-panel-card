@@ -5,7 +5,7 @@ import Avatar from "@/components/atoms/Avatar";
 import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
 import { cn } from "@/utils/cn";
-import { format, isAfter } from "date-fns";
+import { safeFormat, safeIsAfter } from "@/utils/dateHelpers";
 
 const TaskCard = ({
   task,
@@ -16,7 +16,7 @@ const TaskCard = ({
   onReassign,
   className = ""
 }) => {
-  const isOverdue = isAfter(new Date(), new Date(task.dueDate)) && task.status !== "Completed";
+const isOverdue = safeIsAfter(new Date(), task.dueDate) && task.status !== "Completed";
 
   const getPriorityClass = (priority) => {
     switch (priority?.toLowerCase()) {
@@ -114,8 +114,8 @@ const TaskCard = ({
         {/* Due Date */}
         <div className="flex items-center gap-2 text-sm text-secondary-600">
           <ApperIcon name="Calendar" className="w-4 h-4" />
-          <span className={cn(isOverdue && "text-error-600 font-medium")}>
-            Due: {format(new Date(task.dueDate), "MMM d, yyyy")}
+<span className={cn(isOverdue && "text-error-600 font-medium")}>
+            Due: {safeFormat(task.dueDate, "MMM d, yyyy", "No due date")}
           </span>
         </div>
 

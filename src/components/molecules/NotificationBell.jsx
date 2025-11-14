@@ -3,7 +3,7 @@ import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import Badge from "@/components/atoms/Badge";
 import { cn } from "@/utils/cn";
-import { formatDistanceToNow } from "date-fns";
+import { safeFormatDistanceToNow } from "@/utils/dateHelpers";
 
 const NotificationBell = ({ notifications = [], onMarkAsRead, onMarkAllAsRead }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -111,8 +111,8 @@ const NotificationBell = ({ notifications = [], onMarkAsRead, onMarkAllAsRead })
                       )}>
                         {notification.message}
                       </p>
-                      <p className="text-xs text-secondary-500 mt-1">
-                        {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
+<p className="text-xs text-secondary-500 mt-1">
+                        {safeFormatDistanceToNow(notification.createdAt)}
                       </p>
                     </div>
                     {!notification.read && (
