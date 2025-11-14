@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { formatDistanceToNow } from "date-fns";
 import { chatService } from "@/services/api/chatService";
 import { projectService } from "@/services/api/projectService";
 import { teamService } from "@/services/api/teamService";
@@ -12,7 +13,8 @@ import Team from "@/components/pages/Team";
 import Select from "@/components/atoms/Select";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
-
+import Badge from "@/components/atoms/Badge";
+import Avatar from "@/components/atoms/Avatar";
 const Chats = () => {
 const [messages, setMessages] = useState([]);
   const [filteredMessages, setFilteredMessages] = useState([]);
@@ -624,9 +626,10 @@ return (
                     </>
                   )}
                 </Button>
-              </form>
+</form>
             </div>
           </div>
+        </div>
         )}
 
         {/* Quick Stats */}
