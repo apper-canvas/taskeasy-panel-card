@@ -23,15 +23,24 @@ class ChatService {
       .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
   }
 
-  async create(messageData) {
+async create(messageData) {
     await this.delay(400);
+    
+    // Validate required fields
+    if (!messageData || !messageData.content || !messageData.content.trim()) {
+      throw new Error('Message content is required');
+    }
+    
+    if (!messageData.senderId || !messageData.senderName) {
+      throw new Error('Sender information is required');
+    }
     
     const newMessage = {
       Id: Math.max(0, ...this.messages.map(m => m.Id)) + 1,
       senderId: messageData.senderId,
       senderName: messageData.senderName,
       senderRole: messageData.senderRole || 'Team Member',
-      content: messageData.content,
+      content: messageData.content.trim(),
       timestamp: new Date().toISOString(),
       projectId: messageData.projectId || null,
       projectName: messageData.projectName || null

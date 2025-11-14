@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { safeFormatDistanceToNow } from "@/utils/dateHelpers";
 import { chatService } from "@/services/api/chatService";
 import { projectService } from "@/services/api/projectService";
 import { teamService } from "@/services/api/teamService";
 import { toast } from "react-toastify";
 import { cn } from "@/utils/cn";
+import { safeFormatDistanceToNow } from "@/utils/dateHelpers";
 import ApperIcon from "@/components/ApperIcon";
 import Loading from "@/components/ui/Loading";
 import Empty from "@/components/ui/Empty";
 import ErrorView from "@/components/ui/ErrorView";
 import Team from "@/components/pages/Team";
 import Select from "@/components/atoms/Select";
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
-import Badge from "@/components/atoms/Badge";
 import Avatar from "@/components/atoms/Avatar";
+import Button from "@/components/atoms/Button";
+import Badge from "@/components/atoms/Badge";
+import Input from "@/components/atoms/Input";
 const Chats = () => {
 const [messages, setMessages] = useState([]);
   const [filteredMessages, setFilteredMessages] = useState([]);
@@ -141,7 +141,7 @@ const loadMessages = async () => {
       return;
     }
 
-    try {
+try {
       setSendingMessage(true);
       
       const sender = teamMembers.find(member => member.Id === parseInt(selectedSender));
@@ -165,10 +165,11 @@ const loadMessages = async () => {
       setNewMessage('');
       setSelectedProject('');
       
-      toast.success('Message sent successfully');
+      toast.success('Message sent successfully!');
       
-    } catch (err) {
-      toast.error('Failed to send message');
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast.error('Failed to send message. Please try again.');
     } finally {
       setSendingMessage(false);
     }
