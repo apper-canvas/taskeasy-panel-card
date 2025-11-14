@@ -22,12 +22,12 @@ const [messages, setMessages] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
 const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
-  const [conversationMessages, setConversationMessages] = useState([]);
+const [conversationMessages, setConversationMessages] = useState([]);
   const [sendingMessage, setSendingMessage] = useState(false);
   const [selectedSender, setSelectedSender] = useState('');
   const [newMessage, setNewMessage] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
-const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [projectFilter, setProjectFilter] = useState('all');
   // Load initial data
@@ -396,7 +396,7 @@ return (
                       <Select
                         value={selectedSender}
                         onChange={(e) => setSelectedSender(e.target.value)}
-                        required
+required
                         className="w-40 flex-shrink-0"
                       >
                         <option value="">Send as...</option>
@@ -416,7 +416,7 @@ return (
                         />
                         <Button 
                           type="submit" 
-                          disabled={sendingMessage || !selectedSender.trim() || !newMessage.trim()}
+disabled={sendingMessage || !selectedSender.trim() || !newMessage.trim()}
                           className="flex-shrink-0"
                         >
                           {sendingMessage ? (
@@ -566,16 +566,15 @@ return (
                       onChange={(e) => setSelectedSender(e.target.value)}
                       required
                     >
-                      <option value="">Select team member...</option>
+                      <option value="">Select sender...</option>
                       {teamMembers.map(member => (
                         <option key={member.Id} value={member.Id}>
-                          {member.name} ({member.role})
+                          {member.name}
                         </option>
                       ))}
                     </Select>
                   </div>
-
-                  {/* Project Selection */}
+{/* Project Selection */}
                   <div>
                     <label className="block text-sm font-medium text-secondary-700 mb-2">
                       Project (optional)
@@ -627,13 +626,11 @@ return (
                     </>
                   )}
                 </Button>
-</form>
+              </form>
             </div>
           </div>
-        </div>
         )}
-
-        {/* Quick Stats */}
+{/* Quick Stats */}
         <div className="mt-8">
           <div className="bg-white rounded-xl shadow-card border border-secondary-100 p-6">
             <h3 className="font-semibold text-secondary-800 mb-4 flex items-center">
@@ -660,7 +657,7 @@ return (
                 <div className="text-sm text-secondary-600">Team Members</div>
               </div>
             </div>
-</div>
+          </div>
         </div>
       </div>
     </div>
