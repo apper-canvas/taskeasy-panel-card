@@ -62,7 +62,7 @@ class ChatService {
   }
 
   // Get unique projects that have chat messages
-  async getChatProjects() {
+async getChatProjects() {
     await this.delay(150);
     const projects = this.messages
       .filter(m => m.projectId && m.projectName)
@@ -77,6 +77,52 @@ class ChatService {
       }, []);
     
     return projects.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  // Get conversations grouped by context (project or general)
+  async getConversations() {
+    await this.delay(150);
+    const conversations = [];
+    
+    // Group messages by project or general chat
+    const grouped = this.messages.reduce((acc, message) => {
+      const key = message.projectId ? `project-${message.projectId}` : 'general';
+      if (!acc[key]) {
+        acc[key] = {
+          id: key,
+          type: message.projectId ? 'project' : 'general',
+          projectId: message.projectId,
+          projectName: message.projectName,
+          messages: [],
+          lastMessage: null,
+          participants: new Set()
+        };
+      }
+      acc[key].messages.push(message);
+      acc[key].participants.add(message.senderName);
+      return acc;
+    }, {});
+
+    // Convert to array and add metadata
+    Object.values(grouped).forEach(conv => {
+      conv.lastMessage = conv.messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+      conv.participants = Array.from(conv.participants);
+      conv.messageCount = conv.messages.length;
+      conversations.push(conv);
+    });
+
+    return conversations.sort((a, b) => new Date(b.lastMessage?.timestamp || 0) - new Date(a.lastMessage?.timestamp || 0));
+  }
+
+  // Get messages for specific conversation
+  async getConversationMessages(conversationId) {
+    await this.delay(100);
+    const isGeneral = conversationId === 'general';
+    const projectId = isGeneral ? null : parseInt(conversationId.replace('project-', ''));
+    
+    return this.messages
+      .filter(m => isGeneral ? !m.projectId : m.projectId === projectId)
+      .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
   }
 }
 
